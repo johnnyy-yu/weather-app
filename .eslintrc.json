@@ -7,6 +7,7 @@
         "no-console": "off",
         "func-names": "off",
         "spaced-comment": "off",
-        "class-methods-use-this": "off"
+        // "class-methods-use-this": "off",
+        "prefer-destructuring": "off"
     }
 }
