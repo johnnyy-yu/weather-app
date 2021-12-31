@@ -1,0 +1,99 @@
+import { format } from "date-fns";
+
+const Compass = require("cardinal-direction");
+
+function appendData(data) {
+  const weatherData = data;
+  console.log(weatherData);
+
+  if (typeof weatherData === "object") {
+    const currentWeather = (() => {
+      document.getElementById("city").textContent =
+        weatherData.current.city_name.charAt(0).toUpperCase() +
+        weatherData.current.city_name.split(",")[0].slice(1);
+
+      document.getElementById("current-date").textContent = format(
+        new Date(weatherData.current.date * 1000),
+        "MMMM d, yyyy"
+      );
+
+      document.getElementById("sunrise").textContent = format(
+        new Date(weatherData.current.sunrise_time * 1000),
+        "h:m a"
+      );
+
+      document.getElementById("sunset").textContent = format(
+        new Date(weatherData.current.sunset_time * 1000),
+        "h:m a"
+      );
+
+      document.getElementById("humidity").textContent = 
+        `${weatherData.current.humidity}%`;
+
+      document.getElementById("wind").textContent = 
+        `${Compass.cardinalFromDegree(
+        weatherData.current.wind_deg,
+        Compass.CardinalSubset.Ordinal
+      )} ${Math.ceil(weatherData.current.wind_speed)}mph`;
+
+      document.getElementById("current-temp").textContent =
+        weatherData.current.temp;
+
+      document.getElementById("weather-description").textContent =
+        weatherData.current.weather_description;
+    })();
+
+    const forecastWeather = (() => {
+      let i = 0;
+
+      weatherData.forecast.forEach((days) => {
+        const container = document.createElement("div");
+        container.className = `forecast-day-${i}`;
+        document.querySelector(".forecast-weather").appendChild(container);
+
+        Object.keys(days).forEach((key) => {
+          const thisForecastDay = `.${container.className}`;
+          const forecastContainer = document.querySelector(thisForecastDay);
+          const div = document.createElement("div");
+          div.className = key;
+          div.id = key + i;
+          forecastContainer.appendChild(div);
+        });
+
+        const date = (() => {
+          const dateID = `date${i}`;
+          document.getElementById(dateID).textContent = format(
+            new Date(days.date * 1000),
+            "EEEE"
+          );
+        })();
+
+        const maxTemp = (() => {
+          const maxTempID = `max_temp${i}`;
+          document.getElementById(maxTempID).textContent = Math.round(
+            days.max_temp
+          );
+        })();
+
+        const minTemp = (() => {
+          const minTempID = `min_temp${i}`;
+          document.getElementById(minTempID).textContent = Math.round(
+            days.min_temp
+          );
+        })();
+
+        const weatherDescription = (() => {
+          const weatherDescriptionID = `weather_description${i}`;
+          document.getElementById(weatherDescriptionID).textContent =
+            days.weather_description;
+        })();
+
+        i += 1;
+      });
+    })();
+  } else {
+    document.querySelector(".warning-message").textContent = weatherData;
+  }
+}
+
+export default appendData;

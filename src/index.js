@@ -1,3 +1,7 @@
+import appendData from "./app";
+
+window.onload = weather("Los Angeles, US");
+
 class ForecastDays {
   constructor(date, max, min, id, description) {
     this.date = date;
@@ -42,20 +46,23 @@ async function fetchWeather(city, units) {
 
 async function weather(city, units = "imperial") {
   const data = await fetchWeather(city, units);
+  // console.log(data);
 
   if (data !== "ERROR") {
     const currentWeather = {
+      city_name: city,
       date: data.current.dt,
       sunrise_time: data.current.sunrise,
       sunset_time: data.current.sunset,
-      temp: data.current.temp,
+      temp: Math.round(data.current.temp),
       humidity: data.current.humidity,
       wind_speed: data.current.wind_speed,
+      wind_deg: data.current.wind_deg,
       weather_id: data.current.weather[0].id,
       weather_description: data.current.weather[0].main,
     };
 
-    console.log(currentWeather);
+    // console.log(currentWeather);
 
     const forecastWeather = data.daily.map((days) => {
       const date = days.dt;
@@ -66,15 +73,14 @@ async function weather(city, units = "imperial") {
       return new ForecastDays(date, max, min, id, description);
     });
 
-    console.log(forecastWeather);
+    // console.log(forecastWeather);
 
     const allWeather = {
       current: currentWeather,
       forecast: forecastWeather,
     };
 
-    return allWeather;
+    return appendData(allWeather);
   }
-
-  return console.log("Location Not Found");
+  return appendData("Location Not Found");
 }
