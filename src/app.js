@@ -36,8 +36,12 @@ function appendData(data) {
         Compass.CardinalSubset.Ordinal
       )} ${Math.ceil(weatherData.current.wind_speed)}mph`;
 
-      document.getElementById("current-temp").textContent =
-        weatherData.current.temp;
+      document.getElementById("weather-pic").src = 
+        `https://openweathermap.org/img/wn/${weatherData.current.weather_icon}@4x.png`;
+
+      document.getElementById("current-temp").textContent = Math.round(
+        weatherData.current.temp
+      );
 
       document.getElementById("weather-description").textContent =
         weatherData.current.weather_description;
@@ -54,7 +58,14 @@ function appendData(data) {
         Object.keys(days).forEach((key) => {
           const thisForecastDay = `.${container.className}`;
           const forecastContainer = document.querySelector(thisForecastDay);
-          const div = document.createElement("div");
+          let div;
+
+          if (key == "weather_icon") {
+            div = document.createElement("img");
+          } else {
+            div = document.createElement("div");
+          }
+
           div.className = key;
           div.id = key + i;
           forecastContainer.appendChild(div);
@@ -80,6 +91,12 @@ function appendData(data) {
           document.getElementById(minTempID).textContent = Math.round(
             days.min_temp
           );
+        })();
+
+        const weatherIcon = (() => {
+          const iconID = `weather_icon${i}`;
+          const src = `https://openweathermap.org/img/wn/${days.weather_icon}@2x.png`;
+          document.getElementById(iconID).src = src;
         })();
 
         const weatherDescription = (() => {

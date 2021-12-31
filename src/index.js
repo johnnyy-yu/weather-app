@@ -3,11 +3,11 @@ import appendData from "./app";
 window.onload = weather("Los Angeles, US");
 
 class ForecastDays {
-  constructor(date, max, min, id, description) {
+  constructor(date, max, min, icon, description) {
     this.date = date;
     this.max_temp = max;
     this.min_temp = min;
-    this.weather_id = id;
+    this.weather_icon = icon;
     this.weather_description = description;
   }
 }
@@ -54,11 +54,11 @@ async function weather(city, units = "imperial") {
       date: data.current.dt,
       sunrise_time: data.current.sunrise,
       sunset_time: data.current.sunset,
-      temp: Math.round(data.current.temp),
+      temp: data.current.temp,
       humidity: data.current.humidity,
       wind_speed: data.current.wind_speed,
       wind_deg: data.current.wind_deg,
-      weather_id: data.current.weather[0].id,
+      weather_icon: data.current.weather[0].icon,
       weather_description: data.current.weather[0].main,
     };
 
@@ -68,9 +68,9 @@ async function weather(city, units = "imperial") {
       const date = days.dt;
       const max = days.temp.max;
       const min = days.temp.min;
-      const id = days.weather[0].id;
+      const icon = days.weather[0].icon;
       const description = days.weather[0].main;
-      return new ForecastDays(date, max, min, id, description);
+      return new ForecastDays(date, max, min, icon, description);
     });
 
     // console.log(forecastWeather);
