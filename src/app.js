@@ -1,116 +1,76 @@
-import { format } from "date-fns";
+import appendData from "./DOM";
 
-const Compass = require("cardinal-direction");
+export { weather };
 
-function appendData(data) {
-  const weatherData = data;
-  console.log(weatherData);
-
-  if (typeof weatherData === "object") {
-    const currentWeather = (() => {
-      document.getElementById("city").textContent =
-        weatherData.current.city_name.charAt(0).toUpperCase() +
-        weatherData.current.city_name.split(",")[0].slice(1);
-
-      document.getElementById("current-date").textContent = format(
-        new Date(weatherData.current.date * 1000),
-        "MMMM d, yyyy"
-      );
-
-      document.getElementById("sunrise").textContent = format(
-        new Date(weatherData.current.sunrise_time * 1000),
-        "h:m a"
-      );
-
-      document.getElementById("sunset").textContent = format(
-        new Date(weatherData.current.sunset_time * 1000),
-        "h:m a"
-      );
-
-      document.getElementById("humidity").textContent = 
-        `${weatherData.current.humidity}%`;
-
-      document.getElementById("wind").textContent = 
-        `${Compass.cardinalFromDegree(
-        weatherData.current.wind_deg,
-        Compass.CardinalSubset.Ordinal
-      )} ${Math.ceil(weatherData.current.wind_speed)}mph`;
-
-      document.getElementById("weather-pic").src = 
-        `https://openweathermap.org/img/wn/${weatherData.current.weather_icon}@4x.png`;
-
-      document.getElementById("current-temp").textContent = Math.round(
-        weatherData.current.temp
-      );
-
-      document.getElementById("weather-description").textContent =
-        weatherData.current.weather_description;
-    })();
-
-    const forecastWeather = (() => {
-      let i = 0;
-
-      weatherData.forecast.forEach((days) => {
-        const container = document.createElement("div");
-        container.className = `forecast-day-${i}`;
-        document.querySelector(".forecast-weather").appendChild(container);
-
-        Object.keys(days).forEach((key) => {
-          const thisForecastDay = `.${container.className}`;
-          const forecastContainer = document.querySelector(thisForecastDay);
-          let div;
-
-          if (key == "weather_icon") {
-            div = document.createElement("img");
-          } else {
-            div = document.createElement("div");
-          }
-
-          div.className = key;
-          div.id = key + i;
-          forecastContainer.appendChild(div);
-        });
-
-        const date = (() => {
-          const dateID = `date${i}`;
-          document.getElementById(dateID).textContent = format(
-            new Date(days.date * 1000),
-            "EEEE"
-          );
-        })();
-
-        const maxTemp = (() => {
-          const maxTempID = `max_temp${i}`;
-          document.getElementById(maxTempID).textContent = Math.round(
-            days.max_temp
-          );
-        })();
-
-        const minTemp = (() => {
-          const minTempID = `min_temp${i}`;
-          document.getElementById(minTempID).textContent = Math.round(
-            days.min_temp
-          );
-        })();
-
-        const weatherIcon = (() => {
-          const iconID = `weather_icon${i}`;
-          const src = `https://openweathermap.org/img/wn/${days.weather_icon}@2x.png`;
-          document.getElementById(iconID).src = src;
-        })();
-
-        const weatherDescription = (() => {
-          const weatherDescriptionID = `weather_description${i}`;
-          document.getElementById(weatherDescriptionID).textContent =
-            days.weather_description;
-        })();
-
-        i += 1;
-      });
-    })();
-  } else {
-    document.querySelector(".warning-message").textContent = weatherData;
+class ForecastDays {
+  constructor(date, max, min, icon, description) {
+    this.date = date;
+    this.max_temp = max;
+    this.min_temp = min;
+    this.weather_icon = icon;
+    this.weather_description = description;
   }
 }
 
-export default appendData;
+async function getCoord(city) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=8d5090306770f74a321e7b16c973ca04`;
+
+  const thisCity = await fetch(url);
+  const response = await thisCity.text();
+
+  const coord = JSON.parse(response);
+  const latCoord = coord.coord.lat;
+  const lonCoord = coord.coord.lon;
+  const zipCodeToCity = coord.name;
+
+  return [latCoord.toString(), lonCoord.toString(), zipCodeToCity];
+}
+
+async function fetchWeather(city, unit) {
+  const coordinates = await getCoord(city);
+
+  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates[0]}&lon=${coordinates[1]}&exclude=minutely,hourly&units=${unit}&appid=8d5090306770f74a321e7b16c973ca04`;
+
+  const data = await fetch(url);
+  const response = await data.text();
+
+  return [JSON.parse(response), coordinates[2]];
+}
+
+async function weather(city, unit) {
+  try {
+    const weatherData = await fetchWeather(city, unit);
+    const data = weatherData[0];
+
+    const currentWeather = {
+      city_name: weatherData[1],
+      date: data.current.dt,
+      sunrise_time: data.current.sunrise,
+      sunset_time: data.current.sunset,
+      temp: data.current.temp,
+      humidity: data.current.humidity,
+      wind_speed: data.current.wind_speed,
+      wind_deg: data.current.wind_deg,
+      weather_icon: data.current.weather[0].icon,
+      weather_description: data.current.weather[0].main,
+    };
+
+    const forecastWeather = data.daily.map((days) => {
+      const date = days.dt;
+      const max = days.temp.max;
+      const min = days.temp.min;
+      const icon = days.weather[0].icon;
+      const description = days.weather[0].main;
+      return new ForecastDays(date, max, min, icon, description);
+    });
+
+    const allWeather = {
+      current: currentWeather,
+      forecast: forecastWeather,
+    };
+
+    return appendData(allWeather);
+  } catch (e) {
+    return appendData("Location Not Found");
+  }
+}
