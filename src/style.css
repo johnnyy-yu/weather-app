@@ -1,0 +1,144 @@
+@font-face {
+  font-family: 'DM Sans';
+  src:  url("./DM_Sans/DMSans-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-family: "DM Sans";
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../dist/561dd219f343c9a94ff8.jpg);
+  background-size: cover; 
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-bar {
+  font-family: "DM Sans";
+  display: flex;
+  justify-content: flex-end;
+  margin: 1%;
+  gap: 1%;
+}
+
+#search {
+  padding: 2px 6px;
+  width: 270px;
+  border-radius: 12px;
+  border: none;
+}
+
+#imperial,
+#metric {
+  background: none;
+  border: none;
+  color: white;
+  font-size: larger;
+}
+
+#metric {
+  color: silver;
+}
+
+.current-weather {
+  font-size: larger;
+  display: flex;
+  justify-content: space-evenly;
+  flex: 1;
+}
+
+.current-weather-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#city,
+#current-date {
+  width: 100%;
+  font-size: xxx-large;
+  /* padding-top: 80px; */
+}
+
+#city,
+#current-date,
+#sunrise,
+#sunset,
+#humidity,
+#wind {
+  padding-left: 5%;
+}
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.temp-container {
+  display: flex;
+  font-size: xxx-large;
+}
+
+#f {
+  margin-left : 5%;
+}
+
+#c {
+  color: silver;
+}
+
+.forecast-weather {
+  color: white;
+  width: 100%;
+  padding: 2% 0;
+  border-top: 1px solid whitesmoke;
+  display: flex;
+  justify-content: space-around;
+  overflow-x: scroll;
+  backdrop-filter: blur(10px)
+}
+
+.forecast-day-0,
+.forecast-day-1,
+.forecast-day-2,
+.forecast-day-3,
+.forecast-day-4,
+.forecast-day-5,
+.forecast-day-6,
+.forecast-day-7 {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.date{
+  align-self: center;
+}
+
+.weather_icon {
+  align-self: center;
+
+}
+
+.weather_description {
+  align-self: center;
+}

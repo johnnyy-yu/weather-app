@@ -73,4 +73,4 @@ async function weather(city, unit) {
   }
 }
 
-export default weather;
+export { weather };

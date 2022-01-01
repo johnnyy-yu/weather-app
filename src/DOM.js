@@ -16,24 +16,24 @@ function appendData(data) {
         "MMMM d, yyyy"
       );
 
-      document.getElementById("sunrise").textContent = format(
+      document.getElementById("sunrise").textContent = `Sunrise: ${format(
         new Date(weatherData.current.sunrise_time * 1000),
         "h:m a"
-      );
+      )}`;
 
-      document.getElementById("sunset").textContent = format(
+      document.getElementById("sunset").textContent = `Sunset: ${format(
         new Date(weatherData.current.sunset_time * 1000),
         "h:m a"
-      );
+      )}`;
 
       document.getElementById("humidity").textContent = 
-        `${weatherData.current.humidity}%`;
+        `Humidity: ${weatherData.current.humidity}%`;
 
       document.getElementById("wind").textContent = 
-        `${Compass.cardinalFromDegree(
+        `Wind: ${Compass.cardinalFromDegree(
         weatherData.current.wind_deg,
         Compass.CardinalSubset.Ordinal
-      )} ${Math.ceil(weatherData.current.wind_speed)}mph`;
+      )} ${Math.ceil(weatherData.current.wind_speed)} mph`;
 
       document.getElementById("weather-pic").src = 
         `https://openweathermap.org/img/wn/${weatherData.current.weather_icon}@4x.png`;
@@ -74,8 +74,8 @@ function appendData(data) {
           const dateID = `date${i}`;
           document.getElementById(dateID).textContent = format(
             new Date(days.date * 1000),
-            "EEEE"
-          );
+            "EEEE P"
+          ).slice(0, -5);
         })();
 
         const maxTemp = (() => {

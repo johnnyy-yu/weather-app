@@ -1,5 +1,12 @@
 import { celsiusToFahrenheit, fahrenheitToCelsius } from "temperature";
 import { weather } from "./app";
+import "./style.css";
+import background from "./stephen-leonardi-tIPb-Y9l7nA-unsplash.jpg";
+
+// const background = () => {
+//   const image = new Image();
+//   image.src = background;
+// }
 
 let units = "imperial";
 
