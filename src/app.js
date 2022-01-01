@@ -1,7 +1,5 @@
 import appendData from "./DOM";
 
-export { weather };
-
 class ForecastDays {
   constructor(date, max, min, icon, description) {
     this.date = date;
@@ -74,3 +72,5 @@ async function weather(city, unit) {
     return appendData("Location Not Found");
   }
 }
+
+export default weather;

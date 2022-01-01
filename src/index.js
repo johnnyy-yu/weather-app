@@ -1,3 +1,4 @@
+import { celsiusToFahrenheit, fahrenheitToCelsius } from "temperature";
 import { weather } from "./app";
 
 let units = "imperial";
@@ -7,10 +8,42 @@ window.onload = weather("Los Angeles, US", units);
 function whichUnit(unit) {
   if (unit === "f") {
     units = "imperial";
-    console.log(units);
   } else {
     units = "metric";
-    console.log(units);
+  }
+}
+
+function convertTemp(unit) {
+  const maxTemps = document.getElementsByClassName("max_temp");
+  const minTemps = document.getElementsByClassName("min_temp");
+  const currentTemp = document.getElementById("current-temp");
+
+  if (unit === "F") {
+    const currentBefore = currentTemp.textContent;
+    currentTemp.textContent = Math.round(celsiusToFahrenheit(currentBefore));
+
+    Array.from(maxTemps).forEach((temp) => {
+      const before = temp.textContent;
+      temp.textContent = Math.round(celsiusToFahrenheit(before));
+    });
+
+    Array.from(minTemps).forEach((temp) => {
+      const before = temp.textContent;
+      temp.textContent = Math.round(celsiusToFahrenheit(before));
+    });
+  } else if (unit === "C") {
+    const currentBefore = currentTemp.textContent;
+    currentTemp.textContent = Math.round(fahrenheitToCelsius(currentBefore));
+
+    Array.from(maxTemps).forEach((temp) => {
+      const before = temp.textContent;
+      temp.textContent = Math.round(fahrenheitToCelsius(before));
+    });
+
+    Array.from(minTemps).forEach((temp) => {
+      const before = temp.textContent;
+      temp.textContent = Math.round(fahrenheitToCelsius(before));
+    });
   }
 }
 
@@ -20,11 +53,29 @@ const events = (() => {
       weather(event.target.value, units);
       event.target.value = "";
     }
-  })
+  });
   document.getElementById("imperial").addEventListener("click", () => {
-    whichUnit("f");
+    if (units === "metric") {
+      whichUnit("f");
+      convertTemp("F");
+    }
   });
   document.getElementById("metric").addEventListener("click", () => {
-    whichUnit("c");
+    if (units === "imperial") {
+      whichUnit("c");
+      convertTemp("C");
+    }
+  });
+  document.getElementById("f").addEventListener("click", () => {
+    if (units === "metric") {
+      convertTemp("F");
+      units = "imperial";
+    }
+  });
+  document.getElementById("c").addEventListener("click", () => {
+    if (units === "imperial") {
+      convertTemp("C");
+      units = "metric";
+    }
   });
 })();

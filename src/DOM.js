@@ -4,7 +4,6 @@ const Compass = require("cardinal-direction");
 
 function appendData(data) {
   const weatherData = data;
-  console.log(weatherData);
 
   if (typeof weatherData === "object") {
     const currentWeather = (() => {
@@ -60,7 +59,7 @@ function appendData(data) {
           const forecastContainer = document.querySelector(thisForecastDay);
           let div;
 
-          if (key == "weather_icon") {
+          if (key === "weather_icon") {
             div = document.createElement("img");
           } else {
             div = document.createElement("div");
