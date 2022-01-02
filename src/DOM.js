@@ -50,12 +50,11 @@ function appendData(data) {
       let i = 0;
 
       weatherData.forecast.forEach((days) => {
-        const container = document.createElement("div");
-        container.className = `forecast-day-${i}`;
-        document.querySelector(".forecast-weather").appendChild(container);
+        const container = `.forecast-day-${i}`;
+        document.querySelector(container).textContent = "";
 
         Object.keys(days).forEach((key) => {
-          const thisForecastDay = `.${container.className}`;
+          const thisForecastDay = container;
           const forecastContainer = document.querySelector(thisForecastDay);
           let div;
 
@@ -80,16 +79,16 @@ function appendData(data) {
 
         const maxTemp = (() => {
           const maxTempID = `max_temp${i}`;
-          document.getElementById(maxTempID).textContent = Math.round(
+          document.getElementById(maxTempID).textContent = `H: ${Math.round(
             days.max_temp
-          );
+          )}`;
         })();
 
         const minTemp = (() => {
           const minTempID = `min_temp${i}`;
-          document.getElementById(minTempID).textContent = Math.round(
+          document.getElementById(minTempID).textContent = `L: ${Math.round(
             days.min_temp
-          );
+          )}`;
         })();
 
         const weatherIcon = (() => {
