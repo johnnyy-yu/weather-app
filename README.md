@@ -13,9 +13,9 @@ To see a live demo: https://jylx-x.github.io/weather-app/
     <li>View temperatures in Fahrenheit or Celsius</li>
   </ul>
   
- <h2>Pictures</h2>
+ <h2>Screenshot</h2>
   
-![johnnyy-yu github io_weather-app_](https://user-images.githubusercontent.com/93222500/147866280-e925a691-553b-4e39-bffc-9173d3e88c49.png)
+![127 0 0 1_5500_weather-app_dist_index html](https://user-images.githubusercontent.com/93222500/152870888-bc1e6268-d8e4-4e6b-93cb-67475132bade.png)
 
 <h2>Acknowledgement</h2>
 
