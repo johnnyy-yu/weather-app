@@ -3,7 +3,7 @@
 A simple weather app using the OpenWeatherMap API. It was built from HTML, CSS, and JavaScript.
 
 
-To see a live demo: https://jylx-x.github.io/weather-app/
+To see a live demo: https://jylxz.github.io/weather-app/
 
 <h2>Features</h2>
   <ul>
